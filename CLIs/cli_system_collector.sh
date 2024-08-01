@@ -617,5 +617,3 @@ main() {
 trap handle_interruption SIGINT
 trap 'resize_components' SIGWINCH
 main
-
-rm -- "$0"
