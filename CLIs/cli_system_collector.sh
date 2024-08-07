@@ -443,9 +443,9 @@ display() {
             printf "Disk Space Used: ${YELLOW}${filesystems[i]} - ${GREEN}${useds[i]}${NC}\n"
             printf "Disk Space Available: ${YELLOW}${filesystems[i]} - ${GREEN}${avails[i]}${NC}\n"
 
-            send_metrics "${filesystems[i]}.size" "${sizes[i]}" $date
-            send_metrics "${filesystems[i]}.used" "${useds[i]}" $date
-            send_metrics "${filesystems[i]}.avail" "${avails[i]}" $date
+            send_metrics "disk.${filesystems[i]}.size" "${sizes[i]}" $date
+            send_metrics "disk.${filesystems[i]}.used" "${useds[i]}" $date
+            send_metrics "disk.${filesystems[i]}.avail" "${avails[i]}" $date
             sleep 1
         done
         reset_data_arr "disk"
