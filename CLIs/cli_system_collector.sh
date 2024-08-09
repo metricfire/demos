@@ -249,13 +249,13 @@ info_slides() {
     )
 
     declare -a description=(
-        [0]="We aggregate data into 3 buckets (30s, 300s, 3600s) resolutions."
-        [1]="Generates different statistical views on your data. Append :avg, :sum, :max, :min to your metric (test.<hostname>.cpu.usage:sum). The default is avg."
-        [2]="Data display at: 1h-10h 30s, 10h-5d 300s, 5d-2y 3600s resolutions."
-        [3]="We store 30s for 3 days, 300s for 6 months, 3600s data for two years."
-        [4]="Visualize data in different ways. (Graphs, Bars, Pie Charts, and many more)"
-        [5]="Use dot notation to query data. (test.<hostname>.cpu.usage)"
-        [6]="Generate Alerts based on your data, send notifications to your team with Slack, Email, Pagerduty, and more."
+        [0]="We aggregate data into 3 different resolutions (30s, 300s, 3600s) for greater data granularity."
+        [1]="Automatically produces statistical views on your data, providing fast views insight at the most appropriate resolution. Append :avg, :sum, :max, :min (and more) to your metric (test.<hostname>.cpu.usage:sum). The default is avg."
+        [2]="Data displays at: 1h-10h -> 30s, 10h-5d -> 300s, 5d-2y -> 3600s resolutions."
+        [3]="We provide long-term metric storage (30s data for 3 days, 300s data for 6 months, 3600s data for two years)."
+        [4]="Utilise customizable Grafana dashboards to visualize data in different ways (Graphs, Bars, Pie Charts, and many more)."
+        [5]="Use dot notation to query data (test.<hostname>.cpu.usage)."
+        [6]="Easily generate custom alerts based on your data and send notifications to your team via your preferred messaging tool (Slack, Email, Pagerduty, MS Teams and more)."
     )
 
     move_cursor $start_row $start_col
@@ -513,13 +513,13 @@ adjusted_content() {
     move_cursor $start_row $start_col
 
     for word in ${content[@]}; do
-        current_length=$((current_length + ${#word}))
+        current_length=$((current_length + ${#word} + 1))
         if [ $current_length -gt $width ]; then
             ((start_row++))
             move_cursor $start_row $start_col
             current_length=${#word}
         fi
-        printf "$word "
+        printf "%s" "$word "
     done
 }
 
@@ -601,6 +601,7 @@ main() {
     HEADER_VISIBLE=true
     container "header"
     sleep 1
+    trap '' SIGWINCH
     API_PROMPT_VISIBLE=true
     container "api_prompt"
     API_PROMPT_VISIBLE=false
@@ -608,6 +609,7 @@ main() {
     sleep 1
     container "type_prompt"
     sleep 1
+    trap 'resize_components' SIGWINCH
     clear_region 16 $initial_rows 0 $initial_columns
     container "content_body"
     footer
